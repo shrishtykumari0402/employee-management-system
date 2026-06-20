@@ -21,6 +21,14 @@ const App = () => {
 
   },[])
 
+  // Keep the logged-in user's data in sync with context updates so UI re-renders
+  useEffect(() => {
+    if (user === 'employee' && loggedInUserData && userData) {
+      const updated = userData.find(e => e.id === loggedInUserData.id)
+      if (updated) setLoggedInUserData(updated)
+    }
+  }, [userData])
+
 
   const handleLogin = (email, password) => {
     if (email == 'admin@me.com' && password == '123') {
