@@ -4,6 +4,7 @@ import NewTask from './NewTask'
 import CompleteTask from './CompleteTask'
 import FailedTask from './FailedTask'
 import { AuthContext } from '../../context/AuthProvider'
+import { getTaskCounts } from '../../utils/localStorage'
 
 const TaskList = ({ data }) => {
     const [userData, setUserData] = useContext(AuthContext)
@@ -17,9 +18,7 @@ const TaskList = ({ data }) => {
         const updated = userData.map(emp => {
             if (emp.id === data.id) {
                 const tasks = emp.tasks.map((t, i) => i === taskIndex ? ({ ...t, active: true, newTask: false, completed: false, failed: false }) : t)
-                const taskCounts = { ...emp.taskCounts }
-                taskCounts.newTask = Math.max(0, (taskCounts.newTask || 0) - 1)
-                taskCounts.active = (taskCounts.active || 0) + 1
+                const taskCounts = getTaskCounts(tasks)
                 return { ...emp, tasks, taskCounts }
             }
             return emp
@@ -31,9 +30,7 @@ const TaskList = ({ data }) => {
         const updated = userData.map(emp => {
             if (emp.id === data.id) {
                 const tasks = emp.tasks.map((t, i) => i === taskIndex ? ({ ...t, completed: true, active: false, newTask: false, failed: false }) : t)
-                const taskCounts = { ...emp.taskCounts }
-                taskCounts.active = Math.max(0, (taskCounts.active || 0) - 1)
-                taskCounts.completed = (taskCounts.completed || 0) + 1
+                const taskCounts = getTaskCounts(tasks)
                 return { ...emp, tasks, taskCounts }
             }
             return emp
@@ -45,9 +42,7 @@ const TaskList = ({ data }) => {
         const updated = userData.map(emp => {
             if (emp.id === data.id) {
                 const tasks = emp.tasks.map((t, i) => i === taskIndex ? ({ ...t, failed: true, active: false, newTask: false, completed: false }) : t)
-                const taskCounts = { ...emp.taskCounts }
-                taskCounts.active = Math.max(0, (taskCounts.active || 0) - 1)
-                taskCounts.failed = (taskCounts.failed || 0) + 1
+                const taskCounts = getTaskCounts(tasks)
                 return { ...emp, tasks, taskCounts }
             }
             return emp

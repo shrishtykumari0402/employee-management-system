@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { AuthContext } from '../../context/AuthProvider'
+import { getTaskCounts } from '../../utils/localStorage'
 
 const CreateTask = () => {
 
@@ -22,7 +23,7 @@ const CreateTask = () => {
         data.forEach(function (elem) {
             if (asignTo.trim().toLowerCase() === String(elem.firstName).trim().toLowerCase()) {
                 elem.tasks.push(newTask)
-                elem.taskCounts.newTask = (elem.taskCounts.newTask || 0) + 1
+                elem.taskCounts = getTaskCounts(elem.tasks)
             }
         })
         setUserData(data)

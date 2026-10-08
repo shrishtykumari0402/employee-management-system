@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react'
 import { AuthContext } from '../../context/AuthProvider'
 
-const AllTask = (props) => {
+const AllTask = () => {
 
-   const [userData,setUserData] =  useContext(AuthContext)
+   const [userData] =  useContext(AuthContext)
    const [selected, setSelected] = useState(null)
 
   if (!userData) return <div className='p-5'>Loading...</div>

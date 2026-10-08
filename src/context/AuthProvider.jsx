@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react'
-import { getLocalStorage, setLocalStorage } from '../utils/localStorage'
+import { getLocalStorage, getTaskCounts, setLocalStorage } from '../utils/localStorage'
 
 export const AuthContext = createContext()
 
@@ -9,12 +9,14 @@ const AuthProvider = ({ children }) => {
     const [userData, setUserData] = useState(null)
 
     useEffect(() => {
-        // Only initialize local storage with defaults when no data exists
-        if (!localStorage.getItem('employees') || !localStorage.getItem('admin')) {
-            setLocalStorage()
-        }
+        setLocalStorage()
         const {employees} = getLocalStorage()
-        setUserData(employees)
+        const updatedEmployees = employees.map(employee => ({
+            ...employee,
+            taskCounts: getTaskCounts(employee.tasks)
+        }))
+        localStorage.setItem('employees', JSON.stringify(updatedEmployees))
+        setUserData(updatedEmployees)
     }, [])
     
     
